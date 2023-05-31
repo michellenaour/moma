@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plantilla_ca/app/pages/example/example_view.dart';
 import 'package:plantilla_ca/app/pages/principal/PersonalFinance.dart';
-import 'package:plantilla_ca/app/pages/principal/Login.dart';
+import 'package:plantilla_ca/app/pages/principal/login.dart';
 import 'package:plantilla_ca/app/pages/my_app.dart';
 
 void main() {

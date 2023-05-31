@@ -27,7 +27,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Expense'),
+        title: Text('Añadir Gasto'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -35,7 +35,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Amount',
+              'Monto',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -47,7 +47,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
             ),
             SizedBox(height: 16.0),
             Text(
-              'Category',
+              'Categoría',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -56,6 +56,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
             SizedBox(height: 16.0),
             Wrap(
               spacing: 8.0,
+               runSpacing: 8.0, // Add spacing between lines of chips
+                alignment: WrapAlignment.spaceBetween,
               children: categories.map((category) {
                 return ChoiceChip(
                   avatar: Icon(category.icon),
@@ -94,7 +96,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   );
                 }
               },
-              child: Text('Add Expense'),
+              child: Text('Guardar'),
             ),
           ],
         ),
