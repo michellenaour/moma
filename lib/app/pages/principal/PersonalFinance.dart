@@ -28,26 +28,33 @@ class PersonalFinancePage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(16.0),
+          Container(
+            child: SfCircularChart(series: <CircularSeries>[
+              // Renders doughnut chart
+              DoughnutSeries<ChartData, String>(
+                  
+                  dataSource: chartData,
+                  pointColorMapper: (ChartData data, _) => data.color,
+                  xValueMapper: (ChartData data, _) => data.x,
+                  yValueMapper: (ChartData data, _) => data.y,
+                  dataLabelMapper: (ChartData data, _) => data.x,
+                  dataLabelSettings: DataLabelSettings(
+                                    isVisible: true, 
+                                    labelPosition: ChartDataLabelPosition.outside,
+                                    // Renders background rectangle and fills it with series color
+                                    useSeriesColor: true
+                                ))
+            ]),
+          ),
+           const Padding(
+            padding: EdgeInsets.all(1.0),
             child: Text(
-              'Tus gastos',
+              'Total: \$ 166.00',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          Container(
-            child: SfCircularChart(series: <CircularSeries>[
-              // Renders doughnut chart
-              DoughnutSeries<ChartData, String>(
-                  dataSource: chartData,
-                  pointColorMapper: (ChartData data, _) => data.color,
-                  xValueMapper: (ChartData data, _) => data.x,
-                  yValueMapper: (ChartData data, _) => data.y),
-                  
-            ]),
           ),
           Expanded(
             child: ListView.builder(
@@ -55,8 +62,8 @@ class PersonalFinancePage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final expense = chartData[index];
                 return Container(
-                  margin: EdgeInsets.all(8.0),
-                  padding: EdgeInsets.all(16.0),
+                  margin: EdgeInsets.all(4.0),
+                  padding: EdgeInsets.all(3.0),
                   decoration: BoxDecoration(
                     color: expense.color,
                     borderRadius: BorderRadius.circular(8.0),
@@ -70,6 +77,7 @@ class PersonalFinancePage extends StatelessWidget {
               },
             ),
           ),
+         
         ],
       ),
       floatingActionButton: FloatingActionButton(

@@ -88,7 +88,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     context: context,
                     builder: (context) => AlertDialog(
                       title: Text('Error'),
-                      content: Text('Please enter a valid amount and select a category.'),
+                      content: Text('Ingrese un Monto'),
                       actions: [
                         TextButton(
                           onPressed: () {
