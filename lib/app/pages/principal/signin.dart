@@ -10,6 +10,7 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+         backgroundColor: Color.fromRGBO(1, 139, 73, 1),
         title: Text('Login Page'),
          leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -50,6 +51,10 @@ class SignInPage extends StatelessWidget {
             ),
             SizedBox(height: 24.0),
             ElevatedButton(
+               style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(0,151,178,1)), // Set the desired background color here
+          ),
+             
               onPressed: () {
                 final username = usernameController.text;
                 final password = passwordController.text;

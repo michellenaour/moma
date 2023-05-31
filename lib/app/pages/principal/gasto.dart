@@ -74,6 +74,10 @@ class _AddExpensePageState extends State<AddExpensePage> {
             ),
             SizedBox(height: 24.0),
             ElevatedButton(
+               style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(0,151,178,1)), // Set the desired background color here
+          ),
+             
               onPressed: () {
                 final amount = double.tryParse(amountController.text);
                 if (amount != null && selectedCategory != null) {
