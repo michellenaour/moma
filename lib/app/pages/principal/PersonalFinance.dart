@@ -23,7 +23,8 @@ class PersonalFinancePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Personal Finance'),
+        title: Text('Tu resumen Mensual'),
+        backgroundColor: Color.fromRGBO(1, 139, 73, 1),
       ),
       body: Column(
         children: [
@@ -72,6 +73,7 @@ class PersonalFinancePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromRGBO(0,151,178,0.8),
         onPressed: () {
           Navigator.push(
             context,

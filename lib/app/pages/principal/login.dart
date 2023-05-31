@@ -11,7 +11,8 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Page'),
+        title: Text('Inicio de Sesión'),
+        backgroundColor: Color.fromRGBO(1, 139, 73, 1),
       ),
       body: Container(
         padding: EdgeInsets.all(16.0),
@@ -26,35 +27,41 @@ class LoginPage extends StatelessWidget {
             TextField(
               controller: usernameController,
               decoration: InputDecoration(
-                labelText: 'Username',
+                labelText: 'Nombre de Usuario',
               ),
             ),
             SizedBox(height: 16.0),
             TextField(
               controller: passwordController,
               decoration: InputDecoration(
-                labelText: 'Password',
+                labelText: 'Contraseña',
               ),
               obscureText: true,
             ),
             SizedBox(height: 24.0),
             ElevatedButton(
+               style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(0,151,178,1)), // Set the desired background color here
+          ),
               onPressed: () {
                 final username = usernameController.text;
                 final password = passwordController.text;
                 _login(context, username, password);
               },
-              child: Text('Login'),
+              child: Text('Ingresar'),
             ),
             SizedBox(height: 24.0),
             ElevatedButton(
+              style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(0,151,178,0.3)), // Set the desired background color here
+          ),
               onPressed: () {
                  final username = usernameController.text;
                 final password = passwordController.text;
                 _signin(context, username, password);
                
               },
-              child: Text('SignIn'),
+              child: Text('Registrarse'),
             ),
           ],
 

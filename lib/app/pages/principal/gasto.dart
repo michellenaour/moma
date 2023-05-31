@@ -28,6 +28,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Añadir Gasto'),
+        backgroundColor: Color.fromRGBO(1, 139, 73, 1),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
