@@ -4,9 +4,15 @@ import 'package:plantilla_ca/app/pages/principal/gasto.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class PersonalFinancePage extends StatelessWidget {
+
+class PersonalFinancePage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
+  _PersonalFinancePageState createState() => _PersonalFinancePageState();
+}
+
+class _PersonalFinancePageState extends State<PersonalFinancePage> {
+
+    String selectedCategory='Food';
     final List<ChartData> chartData = [
       ChartData('Restaurantes', 25, Color.fromRGBO(192, 188, 245, 1),
           Icons.restaurant),
@@ -20,7 +26,19 @@ class PersonalFinancePage extends StatelessWidget {
       ChartData(
           'Telefono', 52, Color.fromRGBO(192, 255, 179, 1), Icons.phone),
     ];
+      List<Category> categories = [
+    Category('Día', Icons.check_box),
+    Category('Mes', Icons.check_box),
+    Category('Año', Icons.check_box),
+  ];
 
+   @override
+  void dispose() {
+    
+    super.dispose();
+  }
+@override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tu resumen Mensual'),
@@ -46,6 +64,7 @@ class PersonalFinancePage extends StatelessWidget {
                                 ))
             ]),
           ),
+          SizedBox(height: 10.0),
            const Padding(
             padding: EdgeInsets.all(1.0),
             child: Text(
@@ -56,6 +75,30 @@ class PersonalFinancePage extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 10.0),
+          Align(
+  alignment: Alignment.topLeft,
+  child: Padding(
+    padding: EdgeInsets.all(8.0),
+    child: Wrap(
+      spacing: 2.0,
+      runSpacing: 8.0,
+      children: categories.map((category) {
+        return ChoiceChip(
+          label: Text(category.name),
+          selected: selectedCategory == category.name,
+          onSelected: (selected) {
+            setState(() {
+              selectedCategory = (selected ? category.name : null)!;
+            });
+          },
+        );
+      }).toList(),
+    ),
+  ),
+),
+
+            SizedBox(height: 10.0),
           Expanded(
             child: ListView.builder(
               itemCount: chartData.length,
@@ -107,4 +150,11 @@ class ChartData {
   final double y;
   final Color color;
   final IconData icon;
+}
+
+class Category {
+  final String name;
+  final IconData icon;
+
+  Category(this.name, this.icon);
 }
