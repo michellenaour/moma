@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:plantilla_ca/app/pages/principal/PersonalFinance.dart';
-import 'package:plantilla_ca/app/pages/principal/signup.dart';
-
-class LoginPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
   bool isPasswordVisible = false;
+  bool isConfirmPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inicio de Sesión'),
+        title: Text('Registro'),
         elevation: 0,
         backgroundColor: Color.fromRGBO(1, 139, 73, 1),
       ),
@@ -25,11 +26,6 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/logo.png',
-              width: 300,
-              height: 300,
-            ),
             TextField(
               controller: usernameController,
               decoration: InputDecoration(
@@ -40,6 +36,19 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 prefixIcon: Icon(Icons.person),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            TextField(
+              controller: emailController,
+              decoration: InputDecoration(
+                labelText: 'Correo Electrónico',
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                prefixIcon: Icon(Icons.email),
               ),
             ),
             SizedBox(height: 16.0),
@@ -66,32 +75,43 @@ class _LoginPageState extends State<LoginPage> {
               ),
               obscureText: !isPasswordVisible,
             ),
+            SizedBox(height: 16.0),
+            TextField(
+              controller: confirmPasswordController,
+              decoration: InputDecoration(
+                labelText: 'Confirmar Contraseña',
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                prefixIcon: Icon(Icons.lock),
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isConfirmPasswordVisible = !isConfirmPasswordVisible;
+                    });
+                  },
+                  child: Icon(
+                    isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                  ),
+                ),
+              ),
+              obscureText: !isConfirmPasswordVisible,
+            ),
             SizedBox(height: 24.0),
             ElevatedButton(
               style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Color.fromRGBO(0, 151, 178, 1)),
+                backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(0, 151, 178, 1)),
               ),
               onPressed: () {
                 final username = usernameController.text;
+                final email = emailController.text;
                 final password = passwordController.text;
-                _login(context, username, password);
+                final confirmPassword = confirmPasswordController.text;
+                _register(context, username, email, password, confirmPassword);
               },
-              child: Text('Ingresar'),
-            ),
-            SizedBox(height: 24.0),
-            GestureDetector(
-              onTap: () {
-                
-                _signin(context);
-              },
-              child: Text(
-                'Registrarse',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: Color.fromRGBO(0, 151, 178,1),
-                ),
-              ),
+              child: Text('Registrarse'),
             ),
           ],
         ),
@@ -99,26 +119,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _login(BuildContext context, String username, String password) {
-    // Perform your login logic here
+  void _register(BuildContext context, String username, String email, String password, String confirmPassword) {
+    // Perform your registration logic here
 
-    // Assuming login is successful, navigate to the main page
+    // Assuming registration is successful, navigate to the main page
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => PersonalFinancePage(),
-      ),
-    );
-  }
-
-  void _signin(BuildContext context) {
-    // Perform your login logic here
-
-    // Assuming login is successful, navigate to the main page
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SignUpPage(),
       ),
     );
   }
