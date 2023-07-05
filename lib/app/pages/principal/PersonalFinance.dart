@@ -1,9 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:plantilla_ca/app/pages/principal/gasto.dart';
-import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
+import 'package:plantilla_ca/app/pages/principal/gasto.dart';
 
 class PersonalFinancePage extends StatefulWidget {
   @override
@@ -11,35 +11,80 @@ class PersonalFinancePage extends StatefulWidget {
 }
 
 class _PersonalFinancePageState extends State<PersonalFinancePage> {
+  String selectedCategory = 'Food';
+  List<ChartData> chartData = [];
 
-    String selectedCategory='Food';
-    final List<ChartData> chartData = [
-      ChartData('Restaurantes', 25, Color.fromRGBO(192, 188, 245, 1),
-          Icons.restaurant),
-      ChartData(
-          'Mascotas', 38, Color.fromRGBO(218, 200, 156, 1), Icons.pets),
-      ChartData('Ropa', 34, Color.fromRGBO(245, 187, 219, 1), Icons.shopping_bag),
-      ChartData('Entretenimiento', 52, Color.fromRGBO(232, 203, 146, 1),
-          Icons.theaters),
-      ChartData(
-          'Supermercado', 34, Color.fromRGBO(184, 190, 255, 1), Icons.shopping_cart),
-      ChartData(
-          'Telefono', 52, Color.fromRGBO(192, 255, 179, 1), Icons.phone),
-    ];
-      List<Category> categories = [
-    Category('Día', Icons.check_box),
-    Category('Mes', Icons.check_box),
-    Category('Año', Icons.check_box),
+  List<Category> categories = [
+    Category('Restaurantes', Icons.fastfood, Colors.red),
+    Category('Transporte', Icons.directions_car, Colors.blue),
+    Category('Compras', Icons.shopping_cart, Colors.green),
+    Category('Entretenimiento', Icons.movie, Colors.purple),
+    Category('Supermercado', Icons.receipt, Colors.orange),
+    Category('Mascotas', Icons.receipt, Colors.pink),
+    Category('Telefono', Icons.receipt, Colors.lime),
+    Category('Ropa', Icons.receipt, Colors.brown),
   ];
 
-   @override
+  bool _isPageActive = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _parseJsonData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isPageActive) {
+      _isPageActive = true;
+      _parseJsonData();
+    }
+  }
+
+  // ...
+
+  @override
   void dispose() {
-    
+    _isPageActive = false;
     super.dispose();
   }
-@override
+  Future<String> _loadJsonData() async {
+    return await rootBundle.loadString('assets/data.json');
+  }
+  
+
+  Future<void> _parseJsonData() async {
+    String jsonData = await _loadJsonData();
+    Map<String, dynamic> jsonMap = json.decode(jsonData);
+    List<dynamic> jsonList = jsonMap['transacciones'];
+
+    setState(() {
+      chartData = jsonList.map((json) {
+        String x = json['x'];
+        double y = json['y'].toDouble();
+
+        Category matchingCategory = categories.firstWhere(
+          (category) => category.name == x,
+          orElse: () => Category('Unknown', Icons.error, Colors.grey),
+        );
+
+        return ChartData(
+          x,
+          y,
+          matchingCategory.color,
+          matchingCategory.icon,
+        );
+      }).toList();
+    });
+  }
+  
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+    return 
+    Scaffold(
       appBar: AppBar(
         title: Text('Tu resumen Mensual'),
         backgroundColor: Color.fromRGBO(1, 139, 73, 1),
@@ -48,24 +93,22 @@ class _PersonalFinancePageState extends State<PersonalFinancePage> {
         children: [
           Container(
             child: SfCircularChart(series: <CircularSeries>[
-              // Renders doughnut chart
               DoughnutSeries<ChartData, String>(
-                  
-                  dataSource: chartData,
-                  pointColorMapper: (ChartData data, _) => data.color,
-                  xValueMapper: (ChartData data, _) => data.x,
-                  yValueMapper: (ChartData data, _) => data.y,
-                  dataLabelMapper: (ChartData data, _) => data.x,
-                  dataLabelSettings: DataLabelSettings(
-                                    isVisible: true, 
-                                    labelPosition: ChartDataLabelPosition.outside,
-                                    // Renders background rectangle and fills it with series color
-                                    useSeriesColor: true
-                                ))
+                dataSource: chartData,
+                pointColorMapper: (ChartData data, _) => data.color,
+                xValueMapper: (ChartData data, _) => data.x,
+                yValueMapper: (ChartData data, _) => data.y,
+                dataLabelMapper: (ChartData data, _) => data.x,
+                dataLabelSettings: DataLabelSettings(
+                  isVisible: true,
+                  labelPosition: ChartDataLabelPosition.outside,
+                  useSeriesColor: true,
+                ),
+              )
             ]),
           ),
           SizedBox(height: 10.0),
-           const Padding(
+          const Padding(
             padding: EdgeInsets.all(1.0),
             child: Text(
               'Total: \$ 166.00',
@@ -76,29 +119,6 @@ class _PersonalFinancePageState extends State<PersonalFinancePage> {
             ),
           ),
           SizedBox(height: 10.0),
-          Align(
-  alignment: Alignment.topLeft,
-  child: Padding(
-    padding: EdgeInsets.all(8.0),
-    child: Wrap(
-      spacing: 2.0,
-      runSpacing: 8.0,
-      children: categories.map((category) {
-        return ChoiceChip(
-          label: Text(category.name),
-          selected: selectedCategory == category.name,
-          onSelected: (selected) {
-            setState(() {
-              selectedCategory = (selected ? category.name : null)!;
-            });
-          },
-        );
-      }).toList(),
-    ),
-  ),
-),
-
-            SizedBox(height: 10.0),
           Expanded(
             child: ListView.builder(
               itemCount: chartData.length,
@@ -112,7 +132,7 @@ class _PersonalFinancePageState extends State<PersonalFinancePage> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: ListTile(
-                    leading: Icon(expense.icon), // Add the icon
+                    leading: Icon(expense.icon),
                     title: Text(expense.x),
                     trailing: Text('\$${expense.y.toStringAsFixed(2)}'),
                   ),
@@ -120,11 +140,10 @@ class _PersonalFinancePageState extends State<PersonalFinancePage> {
               },
             ),
           ),
-         
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromRGBO(0,151,178,0.8),
+        backgroundColor: Color.fromRGBO(0, 151, 178, 0.8),
         onPressed: () {
           Navigator.push(
             context,
@@ -137,24 +156,19 @@ class _PersonalFinancePageState extends State<PersonalFinancePage> {
   }
 }
 
-class Expense {
-  final String category;
-  final double amount;
-
-  Expense(this.category, this.amount);
-}
-
 class ChartData {
-  ChartData(this.x, this.y, this.color, this.icon);
   final String x;
   final double y;
   final Color color;
   final IconData icon;
+
+  ChartData(this.x, this.y, this.color, this.icon);
 }
 
 class Category {
   final String name;
   final IconData icon;
+  final Color color;
 
-  Category(this.name, this.icon);
+  Category(this.name, this.icon, this.color);
 }
