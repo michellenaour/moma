@@ -1,9 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:plantilla_ca/app/pages/principal/gasto.dart';
+
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'package:flutter/widgets.dart';
 
 class PersonalFinancePage extends StatefulWidget {
   @override
@@ -13,6 +17,8 @@ class PersonalFinancePage extends StatefulWidget {
 class _PersonalFinancePageState extends State<PersonalFinancePage> {
   String selectedCategory = 'Food';
   List<ChartData> chartData = [];
+
+  double sumaY = 0.0;
 
   List<Category> categories = [
     Category('Restaurantes', Icons.fastfood, Colors.red),
@@ -31,6 +37,7 @@ class _PersonalFinancePageState extends State<PersonalFinancePage> {
   void initState() {
     super.initState();
     _parseJsonData();
+    obtenerSumaY();
   }
 
   @override
@@ -49,10 +56,73 @@ class _PersonalFinancePageState extends State<PersonalFinancePage> {
     _isPageActive = false;
     super.dispose();
   }
-  Future<String> _loadJsonData() async {
-    return await rootBundle.loadString('assets/data.json');
+
+  void obtenerSumaY() async {
+    try {
+      final jsonData = await _loadJsonData();
+      final decodedData = json.decode(jsonData);
+      final transacciones = decodedData['transacciones'];
+
+      double suma = 0.0;
+      for (var transaccion in transacciones) {
+        suma += transaccion['y'];
+      }
+
+      setState(() {
+        sumaY = suma;
+      });
+    } catch (e) {
+      print('Error al obtener la suma de los valores "y": $e');
+    }
   }
-  
+
+  Future<String> _loadJsonData() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final path = directory.path;
+    final file = File('$path/MOMA/data.json');
+
+    if (await file.exists()) {
+      return await file.readAsString();
+    } else {
+      // Crear el archivo si no existe
+      final jsonData = await rootBundle.loadString('assets/data.json');
+      await file.create(recursive: true);
+      await file.writeAsString(jsonData);
+      return jsonData;
+    }
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/counter.txt');
+  }
+
+  Future<File> writeCounter(int counter) async {
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsString('$counter');
+  }
+
+  Future<int> readCounter() async {
+    try {
+      final file = await _localFile;
+
+      // Read the file
+      final contents = await file.readAsString();
+
+      return int.parse(contents);
+    } catch (e) {
+      // If encountering an error, return 0
+      return 0;
+    }
+  }
 
   Future<void> _parseJsonData() async {
     String jsonData = await _loadJsonData();
@@ -78,13 +148,10 @@ class _PersonalFinancePageState extends State<PersonalFinancePage> {
       }).toList();
     });
   }
-  
 
   @override
   Widget build(BuildContext context) {
-
-    return 
-    Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text('Tu resumen Mensual'),
         backgroundColor: Color.fromRGBO(1, 139, 73, 1),
@@ -108,10 +175,10 @@ class _PersonalFinancePageState extends State<PersonalFinancePage> {
             ]),
           ),
           SizedBox(height: 10.0),
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(1.0),
             child: Text(
-              'Total: \$ 166.00',
+              'Total: \$ $sumaY',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

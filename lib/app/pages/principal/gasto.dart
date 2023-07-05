@@ -59,7 +59,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
                 ),
               ),
             ),
@@ -75,7 +76,9 @@ class _AddExpensePageState extends State<AddExpensePage> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: ToggleButtons(
-                isSelected: categories.map((category) => selectedCategory == category.name).toList(),
+                isSelected: categories
+                    .map((category) => selectedCategory == category.name)
+                    .toList(),
                 selectedColor: Colors.white,
                 fillColor: Colors.blue,
                 borderRadius: BorderRadius.circular(10.0),
@@ -105,24 +108,23 @@ class _AddExpensePageState extends State<AddExpensePage> {
             Center(
               child: ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(0, 151, 178, 1)),
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Color.fromRGBO(0, 151, 178, 1)),
                 ),
                 onPressed: () {
                   final amount = double.tryParse(amountController.text);
                   if (amount != null && selectedCategory != '') {
                     guardarTransaccion(selectedCategory, amount, context);
-                    
                   } else {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
                         title: Text('Error'),
-                        content: Text('Ingrese un monto y seleccione una categoría'),
+                        content:
+                            Text('Ingrese un monto y seleccione una categoría'),
                         actions: [
                           TextButton(
-                            onPressed: () {
-                              
-                            },
+                            onPressed: () {},
                             child: Text('OK'),
                           ),
                         ],
@@ -148,8 +150,6 @@ class Category {
   Category(this.name, this.icon, this.color);
 }
 
-
-
 class Transaccion {
   String categoria;
   double monto;
@@ -171,28 +171,68 @@ void guardarTransaccion(String categoria, double monto, BuildContext context) {
   guardarTransaccionEnArchivo(context);
 }
 
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+
+  return directory.path;
+}
+
+Future<File> get _localFile async {
+  final path = await _localPath;
+  return File('$path/counter.txt');
+}
+
+Future<File> writeCounter(int counter) async {
+  final file = await _localFile;
+
+  // Write the file
+  return file.writeAsString('$counter');
+}
+
+Future<int> readCounter() async {
+  try {
+    final file = await _localFile;
+
+    // Read the file
+    final contents = await file.readAsString();
+
+    return int.parse(contents);
+  } catch (e) {
+    // If encountering an error, return 0
+    return 0;
+  }
+}
+
 void guardarTransaccionEnArchivo(BuildContext context) async {
   final directory = await getApplicationDocumentsDirectory();
-  final file = File('assets/data.json');
+  final path = directory.path;
+  final file = File('$path/MOMA/data.json');
+  print(file);
 
   // Verificar si el archivo existe
- if (file.existsSync()) {
+  if (file.existsSync()) {
     final existingData = await file.readAsString();
     final existingJsonData = json.decode(existingData);
-    List<dynamic> transaccionesAnteriores = List<dynamic>.from(existingJsonData['transacciones']);
+    List<dynamic> transaccionesAnteriores =
+        List<dynamic>.from(existingJsonData['transacciones']);
     transaccionesAnteriores.add(transaccion!.toJson());
 
     final jsonData = json.encode({'transacciones': transaccionesAnteriores});
+    print(jsonData);
     await file.writeAsString(jsonData);
+    print(file);
+    print(jsonData);
   } else {
     // Si el archivo no existe, crear uno nuevo con la transacción actual
     final transaccionJson = transaccion!.toJson();
-    final jsonData = json.encode({'transacciones': [transaccionJson]});
+    final jsonData = json.encode({
+      'transacciones': [transaccionJson]
+    });
     await file.writeAsString(jsonData);
   }
 
   // Regresar a la página anterior (PersonalFinancePage)
-   Navigator.push(
+  Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => PersonalFinancePage()),
   );
