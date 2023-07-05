@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:plantilla_ca/app/pages/example/example_view.dart';
-import 'package:plantilla_ca/app/pages/principal/PersonalFinance.dart';
 import 'package:plantilla_ca/app/pages/principal/login.dart';
-import 'package:plantilla_ca/app/pages/my_app.dart';
-import 'package:flutter/material.dart';
-import 'package:plantilla_ca/app/pages/example/example_view.dart';
-import 'package:plantilla_ca/app/pages/principal/PersonalFinance.dart';
-import 'package:plantilla_ca/app/pages/principal/login.dart';
-import 'package:plantilla_ca/app/pages/my_app.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Mi Aplicación',
       theme: ThemeData(
         primarySwatch: Colors.blue,

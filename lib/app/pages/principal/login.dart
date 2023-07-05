@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:plantilla_ca/app/pages/principal/PersonalFinance.dart';
 import 'package:plantilla_ca/app/pages/principal/signup.dart';
 
@@ -69,8 +73,8 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 24.0),
             ElevatedButton(
               style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Color.fromRGBO(0, 151, 178, 1)),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Color.fromRGBO(0, 151, 178, 1)),
               ),
               onPressed: () {
                 final username = usernameController.text;
@@ -82,14 +86,13 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 24.0),
             GestureDetector(
               onTap: () {
-                
                 _signin(context);
               },
               child: Text(
                 'Registrarse',
                 style: TextStyle(
                   decoration: TextDecoration.underline,
-                  color: Color.fromRGBO(0, 151, 178,1),
+                  color: Color.fromRGBO(0, 151, 178, 1),
                 ),
               ),
             ),
@@ -99,16 +102,69 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _login(BuildContext context, String username, String password) {
-    // Perform your login logic here
+  Future<void> _login(
+      BuildContext context, String username, String password) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/MOMA/loginSign.json');
 
-    // Assuming login is successful, navigate to the main page
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PersonalFinancePage(),
-      ),
-    );
+      // Verificar si el archivo existe
+      if (await file.exists()) {
+        final jsonData = await file.readAsString();
+        final user = json.decode(jsonData);
+
+        if (user['username'] == username && user['password'] == password) {
+          // Inicio de sesión exitoso
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PersonalFinancePage(),
+            ),
+          );
+          return;
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error de inicio de sesión'),
+              content: Text('El archivo de inicio de sesión no existe.'),
+              actions: [
+                ElevatedButton(
+                  child: Text('Aceptar'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+
+      // Si no se encuentra una coincidencia o el archivo no existe, mostrar mensaje de error
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error de inicio de sesión'),
+            content: Text('Credenciales incorrectas. Inténtelo nuevamente.'),
+            actions: [
+              ElevatedButton(
+                child: Text('Aceptar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      print('Error de inicio de sesión: $e');
+      // Manejo de errores de inicio de sesión
+    }
   }
 
   void _signin(BuildContext context) {
