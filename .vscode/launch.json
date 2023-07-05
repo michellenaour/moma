@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "plantilla_ca",
+            "name": "MOMO",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "plantilla_ca (profile mode)",
+            "name": "MOMO (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "plantilla_ca (release mode)",
+            "name": "MOMO (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

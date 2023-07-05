@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:plantilla_ca/domain/entities/example.dart';
-import 'package:plantilla_ca/domain/repositories/example_repository.dart';
+import 'package:MOMO/domain/entities/example.dart';
+import 'package:MOMO/domain/repositories/example_repository.dart';
 
 class GetExampleUseCase
     extends UseCase<GetExampleUseCaseResponse, GetExampleUseCaseParams> {

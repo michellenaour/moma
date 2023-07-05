@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:flutter/widgets.dart';
-import 'package:plantilla_ca/app/pages/principal/PersonalFinance.dart';
+import 'package:MOMO/app/pages/principal/PersonalFinance.dart';
 
 class AddExpensePage extends StatefulWidget {
   @override

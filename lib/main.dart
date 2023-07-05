@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plantilla_ca/app/pages/principal/login.dart';
+import 'package:MOMO/app/pages/principal/login.dart';
 
 void main() {
   runApp(MyApp());

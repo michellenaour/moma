@@ -1,8 +1,8 @@
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:plantilla_ca/app/pages/example/example_presenter.dart';
-import 'package:plantilla_ca/data/repositories/mock/data_mock_example_repository.dart';
-import 'package:plantilla_ca/domain/entities/example.dart';
-import 'package:plantilla_ca/domain/usecases/get_example_use_case.dart';
+import 'package:MOMO/app/pages/example/example_presenter.dart';
+import 'package:MOMO/data/repositories/mock/data_mock_example_repository.dart';
+import 'package:MOMO/domain/entities/example.dart';
+import 'package:MOMO/domain/usecases/get_example_use_case.dart';
 
 class ExampleController extends Controller {
   ExampleController(DataMockExampleRepository exampleRepository)

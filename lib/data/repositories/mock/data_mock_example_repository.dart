@@ -1,6 +1,6 @@
 import 'package:logging/logging.dart';
-import 'package:plantilla_ca/domain/entities/example.dart';
-import 'package:plantilla_ca/domain/repositories/example_repository.dart';
+import 'package:MOMO/domain/entities/example.dart';
+import 'package:MOMO/domain/repositories/example_repository.dart';
 
 class DataMockExampleRepository implements ExampleRepository {
   factory DataMockExampleRepository() => _instance;

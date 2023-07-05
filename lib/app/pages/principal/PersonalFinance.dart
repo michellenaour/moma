@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:plantilla_ca/app/pages/principal/gasto.dart';
+import 'package:MOMO/app/pages/principal/gasto.dart';
 
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';

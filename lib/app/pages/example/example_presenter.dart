@@ -1,6 +1,6 @@
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:plantilla_ca/domain/repositories/example_repository.dart';
-import 'package:plantilla_ca/domain/usecases/get_example_use_case.dart';
+import 'package:MOMO/domain/repositories/example_repository.dart';
+import 'package:MOMO/domain/usecases/get_example_use_case.dart';
 
 class ExamplePresenter extends Presenter {
   Function? getGreetingOnNext;
